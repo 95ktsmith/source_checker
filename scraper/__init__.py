@@ -2,4 +2,4 @@
 """ Init module """
 
 from .scraper import Scraper
-scrape = Scraper()
+scraper = Scraper()
