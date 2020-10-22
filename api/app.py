@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 from flask_cors import CORS
 from flask import Flask, jsonify, abort, make_response, request
-import os, sys
-sys.path.insert(0, os.path.abspath(".."))
-from scraper import scrape
+
+scraper = __import__('scraper')
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
 
@@ -12,11 +11,25 @@ def not_found(e):
     """ Page not found """
     return jsonify({"error": "Not found"}), 404
 
-@app.route('/gather_links', methods=['POST'], strict_slashes=False)
-def gather_links():
-    """ Returns OK """
-    links = scrape.scrape_links(request.json['url'])
-    links = scrape.filter_links(links, request.json['url'])
+@app.route('/sourcecheck', methods=['POST'], strict_slashes=False)
+def sourcecheck():
+    """
+    Returns a URL's domain rating and list of sources with their domain ratings
+    in the form of:
+    {
+        'domain_rating' : float,
+        'sources': {
+                        'trusted': [{'url': string, 'rating': float}, ...],
+                        'semi-trusted': [{...}, ...],
+                        'questionable': [{...}, ...],
+                        'irrelevant':   [{...}, ...],
+                   }
+    }
+    """
+    print("URL: {}".format(request.json['url']))
+    links = scraper.scrape_links(request.json['url'])
+    print(links)
+    links = scraper.filter_links(links, request.json['url'])
     return make_response(jsonify(links), 200)
 
 if __name__ == "__main__":
@@ -24,5 +37,5 @@ if __name__ == "__main__":
 
 
 '''
-curl -d '{"url": "https://www.digitalocean.com/community/tutorials/how-to-secure-haproxy-with-let-s-encrypt-on-ubuntu-14-04"}' -H "Content-Type: application/json" 0.0.0.0:6000/gather_links
+curl -d '{"url": "https://www.digitalocean.com/community/tutorials/how-to-secure-haproxy-with-let-s-encrypt-on-ubuntu-14-04"}' -H "Content-Type: application/json" 0.0.0.0:6000/sourcecheck
 '''
