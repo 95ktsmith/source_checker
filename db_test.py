@@ -14,7 +14,7 @@ else:
     print("newdom is incorrectly not none:")
     print(newdom)
 
-print("test 2:")
+print("test 2:create then check domain")
 dbm.new_domain("tabley")
 newdom = dbm.check_domain("tabley")
 if newdom is None:
@@ -24,6 +24,7 @@ else:
     correct += 1
     print("newdom is correctly not none:")
     print(newdom)
+dbm.delete_domain("tabley")
 
 print("test 3:article check")
 newart = dbm.check_article("url")
@@ -36,14 +37,22 @@ else:
     print(newart)
 
 print("test 4: article creation")
-dbm.new_article({"url":"testsite.com/articles"})
-newart_cr = dbm.check_article("testsite.com/articles")
+dbm.new_article({"url": "testsite.com/article", 'domain': 'test_domain'})
+newart_cr = dbm.check_article("testsite.com/article")
 if newart_cr is None:
     wrong += 1
-    print("newart incorrectly didn't create") 
+    print("newart incorrectly didn't create")
 else:
     correct += 1
     print("newart correctly created")
     print(newart_cr)
+dbm.delete_article("testsite.com/article")
+
+print("test of creation of article review ")
+dbm.new_review({'domain': 'test_domain', 'url':'testsite.com/articles', 'score': 4})
+dbm.new_review({'domain': 'test_domain', 'url':'testsite.com/articles', 'score': 3})
+print("attempted to create review")
+dbm.update_domain("test_domain")
+
 print("ending test protocol")
 print("{} passed tests and {} wrong".format(correct, wrong))
