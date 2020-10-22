@@ -31,9 +31,13 @@ def new_domain(name):
     newdomain = {"name": name,
                  "rating": 0}
     db.domains_collection.insert_one(newdomain)
+    # Return the newly created domain with check_domain
+    # That way it will return the object if insertion was successful
+    # Or None if it failed
+    return check_domain(name)
 
 
-def delete_domain(name):
+def delete_domain(name=None):
     """ deletes a domain, probably just for testing """
     if check_domain(name) is None:
         print("domain does not exist")
@@ -42,7 +46,7 @@ def delete_domain(name):
     return deleted
 
 
-def check_article(url):
+def check_article(url=None):
     """checks if the article exists in the database """
     if url is None:
         print("no url supplied")
@@ -53,7 +57,7 @@ def check_article(url):
     return entry
 
 
-def delete_article(url):
+def delete_article(url=None):
     """delete an article, mostly for testing """
     if url is None:
         print("no article url given to delete")
@@ -62,8 +66,11 @@ def delete_article(url):
     return deleted
 
 
-def new_article(art_dict):
+def new_article(art_dict=None):
     """ creates new article entry """
+    if art_dict is None:
+        print("no article dictionary supplied")
+        return None
     if 'url' not in art_dict:
         print("the article has no url")
         return None
@@ -75,7 +82,7 @@ def new_article(art_dict):
 
 
 def new_review(reviewdict):
-    """ creates new dictionary should have domain name, 
+    """ creates new dictionary should have domain name,
         article url, and score from 1-5
     """
     if 'domain' not in reviewdict:
@@ -84,10 +91,12 @@ def new_review(reviewdict):
     if 'url' not in reviewdict:
         print('the review must have a url')
         return None
-    #reviewdict['date'] = datetime.datetime.utcnow()
+    # reviewdict['date'] = datetime.datetime.utcnow()
     db.ratings_collection.insert_one(reviewdict)
-    #update domain rating
-    #optionally update article rating
+    # then update the domain entry
+    update_domain(reviewdict['domain'])
+    # optionally update article rating
+    update_article_rate(reviewdict['domain'])
 
 
 def update_domain(name):
@@ -97,10 +106,12 @@ def update_domain(name):
         print("domain does not exist")
         return None
     print("the domain exists lets find avg rating")
-    #aggrline = [
+    # this could be done with an aggregation function, but is most likely
+    # less efficient than doing it with python code
+    # aggrline = [
     #    {'$group': {"name": "$score"}}
-    #]
-    #avg = db.ratings_collection.aggregate()
+    # ]
+    # avg = db.ratings_collection.aggregate()
     reviews = db.ratings_collection.find({'domain': name})
     sumrates = 0
     numrates = 0
@@ -110,6 +121,38 @@ def update_domain(name):
             numrates += 1
     print(sumrates / numrates)
     domfilter = {'name': name}
-    newvalues = { "$set": { 'rating': sumrates / numrates}}
+    newvalues = {"$set": {'rating': sumrates / numrates}}
     db.domains_collection.update_one(domfilter, newvalues)
     return(sumrates / numrates)
+
+
+def update_article_rate(domain_name):
+    """ updates the domain rating in the article section """
+    domain = check_domain(domain_name)
+    if domain is None:
+        print("domain does not exist in DB")
+        return None
+    art_filter = {'domain': domain}
+    newvalues = {"$set": {'rating': domain['rating']}}
+    db.article_collection.update_many(art_filter, newvalues)
+    print("new domain rating of article is{}".format(domain['rating']))
+    return domain['rating']
+
+
+def update_article_sources(url, new_sources):
+    """ update article sources
+        to be called when the last scrape was > 24 hrs ago
+        takes the url and new sources object (string or dict
+        depending on when you want to parse
+    """
+    if url is None or new_sources in None:
+        return None
+    article = check_article(url)
+    if article is None:
+        print("article does not exist in DB")
+        return None
+    art_filter = {'url': url}
+    newvalues = {"$set": {'sources': new_sources}}
+    db.article_collection.update_one(art_filter, newvalues)
+    # print("sources updated")
+    return check_article(url)
