@@ -25,6 +25,7 @@ def sourcecheck():
                         'irrelevant':   [{...}, ...],
                    }
     }
+    Doesn't actually do this format yet though. It will soon.
     """
     print("URL: {}".format(request.json['url']))
     links = scraper.scrape_links(request.json['url'])
