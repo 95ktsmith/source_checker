@@ -20,7 +20,8 @@ def rate_article():
     url = request.json['url']
     domain = scraper.get_domain(url)
     rating = request.json['rating']
-    db.new_review({'article': article, 'domain': domain, 'rating': rating})
+    db.new_review({'url': url, 'domain': domain, 'score': rating})
+    return jsonify("Ok"), 200
 
 @app.route('/sourcecheck', methods=['POST'], strict_slashes=False)
 def sourcecheck():
@@ -51,7 +52,7 @@ def sourcecheck():
         # Get the scraper
         links = scraper.scrape_links(url)
         sources = scraper.filter_links(links, url)
-
+        return_data['sources'] = sources
         if article is None:
             # Insert article into database if it doesn't exist
             article = {

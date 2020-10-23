@@ -145,14 +145,15 @@ def update_article_sources(url, new_sources):
         takes the url and new sources object (string or dict
         depending on when you want to parse
     """
-    if url is None or new_sources in None:
+    if url is None or new_sources is None:
         return None
     article = check_article(url)
     if article is None:
         print("article does not exist in DB")
         return None
     art_filter = {'url': url}
-    newvalues = {"$set": {'sources': new_sources}}
+    date = datetime.datetime.utcnow()
+    newvalues = {"$set": {'sources': new_sources, 'date': date}}
     db.article_collection.update_one(art_filter, newvalues)
     # print("sources updated")
     return check_article(url)

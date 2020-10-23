@@ -46,7 +46,13 @@ else:
     correct += 1
     print("newart correctly created")
     print(newart_cr)
+    
 dbm.delete_article("testsite.com/article")
+
+print("test 5: source change")
+charticle = dbm.check_article("testsite.com/articles")
+churl = "testsite.com/articles"
+dbm.update_article_sources(churl, {'sources': "hello"})
 
 print("test of creation of article review ")
 dbm.new_review({'domain': 'test_domain', 'url':'testsite.com/articles', 'score': 4})
