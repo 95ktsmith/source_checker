@@ -16,12 +16,12 @@ def get_domain(url):
     if periods > 1:
         first = url.find('.')
         second = first + url[first + 1:].find('.') + 1
-        return url[first + 1:second]
+        return url[first + 1:second].lower()
     else:
         if url.find('//') == -1:
-            return url[:url.find('.')]
+            return url[:url.find('.')].lower()
         else:
-            return url[url.find('//') + 2:url.find('.')]
+            return url[url.find('//') + 2:url.find('.')].lower()
 
 def scrape_links(url):
     """ Returns a list of links scraped from page @ url """
