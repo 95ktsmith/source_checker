@@ -1,0 +1,41 @@
+.Search {
+    justify-content: center;
+}
+
+.Search input[type=text] {
+    background-color: #ffffff;
+    outline: none;
+
+    border-top-left-radius: .5vw;
+    border-bottom-left-radius: .5vw;
+
+    border-width: 1px;
+
+    width: 45vw;
+    height: 3vw;
+    font-size: 17px;
+}
+
+button {
+    
+    border-top-right-radius: .5vw;
+    border-bottom-right-radius: .5vw;   
+    border-width: 1px;
+    border-left-width: 2px;
+    border-color: black;
+    
+    background-color: #F5F5F5;
+
+    cursor: pointer;
+    height: 3.3vw;
+    width: 4vw;
+
+    font-size: 17px;
+    
+    float: right;
+    display: block;
+}
+
+button:hover {
+    background-color: #96EDBB;
+}

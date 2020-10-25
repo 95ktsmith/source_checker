@@ -1,0 +1,18 @@
+.source {
+    background-color: #E0E0E0;
+
+    border-width: 1px;
+    border-style: dotted;
+    border-radius: 5px;
+
+    margin-top: 5px;
+}
+
+.trusted {
+    background-color: #96EDBB;
+}
+
+.semi {
+    border-color: #F5DAA3;
+}
+
