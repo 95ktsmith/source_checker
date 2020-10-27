@@ -2,6 +2,8 @@
 from datetime import datetime, timedelta
 from flask_cors import CORS
 from flask import Flask, jsonify, make_response, request
+import requests
+
 db = __import__('db_mgmt')
 scraper = __import__('scraper')
 app = Flask(__name__)
@@ -26,19 +28,28 @@ def rate_article():
 @app.route('/sourcecheck', methods=['POST'], strict_slashes=False)
 def sourcecheck():
     """
-    Returns a URL's domain rating and list of sources with their domain ratings
+    Returns a URL's domain rating, number of ratings, and list of sources
     in the form of:
     {
-        'domain_rating' : float,
+        'rating' : float,
+        'rating_count': int,
         'sources': {
-                        'trusted': [{'url': string, 'rating': float}, ...],
-                        'semi-trusted': [{...}, ...],
-                        'questionable': [{...}, ...],
-                        'irrelevant':   [{...}, ...],
+                        'trusted': [url, ...],
+                        'semi-trusted': [..., ...],
+                        'questionable': [..., ...],
+                        'irrelevant':   [..., ...],
                    }
     }
     """
     url = request.json['url']
+    # If the url can't be reached or is invalid format, return None
+    try:
+        r = requests.get(url)
+        if r.status_code < 200 or r.status_code > 299:
+            return make_response(jsonify(None), 400)
+    except:
+        return make_response(jsonify(None), 400)
+
     domain = scraper.get_domain(url)
     return_data = {}
 
@@ -65,8 +76,6 @@ def sourcecheck():
             # Update article sources if it does exist but has old data
             db.update_article_sources(url, sources)
 
-    return_data['sources'] = pair_ratings_to_sources(return_data['sources'])
-
     # Check for domain in database
     db_domain = db.check_domain(domain)
     if db_domain is not None:
@@ -76,6 +85,10 @@ def sourcecheck():
         # Create new domain entry if it doesn't exist
         return_data['rating'] = 0
         db.new_domain(domain)
+
+    # Get the number of ratings for this domain
+    # rating_count will be None if the domain isn't in database
+    return_data['rating_count'] = db.count_ratings(domain)
 
     return return_data
 
