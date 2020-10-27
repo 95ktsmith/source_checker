@@ -126,6 +126,21 @@ def update_domain(name):
     return(sumrates / numrates)
 
 
+def count_ratings(dname):
+    """takes in domain to determine how many reviews it has """
+    domain = check_domain(name)
+    if domain is None:
+        print("domain does not exist")
+        return None
+    reviews = db.ratings_collection.find({'domain': name})
+    print("length of domain reviews is {}".foramt(reviews.length())
+    num_rates = 0
+    for review in reviews:
+        num_rates += 1
+    print("the number of reviews is {}".format(num_rates))
+    return num_rates
+
+
 def update_article_rate(domain_name):
     """ updates the domain rating in the article section """
     domain = check_domain(domain_name)
