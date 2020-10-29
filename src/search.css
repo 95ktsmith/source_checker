@@ -1,5 +1,10 @@
 .Search {
     justify-content: center;
+    width: 75vw;
+}
+
+form {
+    display:flex;
 }
 
 .Search input[type=text] {
@@ -9,15 +14,16 @@
     border-top-left-radius: .5vw;
     border-bottom-left-radius: .5vw;
 
-    border-width: 1px;
+    margin-left: auto;
+    margin-right: auto;
 
-    width: 45vw;
-    height: 3vw;
+    border-width: 1px;
+    width: 95vw;
+    height: 4vw;
     font-size: 17px;
 }
 
 button {
-    
     border-top-right-radius: .5vw;
     border-bottom-right-radius: .5vw;   
     border-width: 1px;
@@ -25,15 +31,14 @@ button {
     border-color: black;
     
     background-color: #F5F5F5;
-
-    cursor: pointer;
-    height: 3.3vw;
-    width: 4vw;
-
-    font-size: 17px;
     
-    float: right;
-    display: block;
+    cursor: pointer;
+    height: 4vw;
+    width: 70px;
+}
+
+button .h6 {
+    justify-content: center;
 }
 
 button:hover {

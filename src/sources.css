@@ -1,18 +1,14 @@
 .source {
-    background-color: #E0E0E0;
+    background-color: #FFFFFF;
 
+    border-color: gray;
     border-width: 1px;
-    border-style: dotted;
+    border-style: solid;
     border-radius: 5px;
 
+    width: 100%;
+    height: auto;
+    word-break: break-all;
+    white-space: normal;
     margin-top: 5px;
 }
-
-.trusted {
-    background-color: #96EDBB;
-}
-
-.semi {
-    border-color: #F5DAA3;
-}
-

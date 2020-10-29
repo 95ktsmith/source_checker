@@ -2,6 +2,7 @@ import React from "react";
 import TrustedSrc from "./trusted";
 import SemiTrustedSrc from "./semi";
 import UnknownSrc from "./questionable";
+import RateFtr from "./rateFtr"
 
 import "./sources.css";
 
@@ -12,7 +13,9 @@ export default class search extends React.Component {
             value: '',
             loaded: '',
             error: false,
-            data: ''
+            url: '',
+            sources: '',
+            rating: ''
         };
 
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -38,8 +41,7 @@ export default class search extends React.Component {
                 console.log(error)
             }) 
         const data = await response.json();
-        this.setState({loaded: true, data: data})
-        console.log(data);
+        this.setState({loaded: true, sources: data['sources'], url: this.state.value, rating: data['rating']})
     }
 
     render () {
@@ -51,15 +53,19 @@ export default class search extends React.Component {
                 </form>
                 {this.state.loaded ? 
                 <div>
-                    {this.state.data['trusted'].map(src => (
+                    <h4>Sources from {this.state.url}</h4>
+                    <h5>Average user trust rating: {this.state.rating}/5</h5>
+                    {this.state.sources['trusted'].map(src => (
                         <TrustedSrc url = {src} />
                     ))}
-                    {this.state.data['semi-trusted'].map(src => (
+                    {this.state.sources['semi-trusted'].map(src => (
                         <SemiTrustedSrc url = {src} />
                     ))}
-                    {this.state.data['questionable'].map(src => (
+                    {this.state.sources['questionable'].map(src => (
                         <UnknownSrc url = {src} />
                     ))}
+                    <RateFtr url = {this.state.value} />
+
 
                 </div> : <div><h5>Search an article to discover what sources its using</h5></div>}
             </div>

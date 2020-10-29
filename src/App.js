@@ -4,6 +4,7 @@ import Search from "./search";
 import Footer from "./footer";
 import Phrase from "./phrase";
 import Header from "./header";
+import LandingPageContent from "./landingPage";
 
 import './App.css';
 
@@ -16,6 +17,7 @@ function App() {
         <Phrase />
         <Search />
       </header>
+      <LandingPageContent />
       <Footer />
     </div>
   );

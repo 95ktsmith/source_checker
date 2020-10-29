@@ -1,6 +1,7 @@
 .footer {
-    background-color: blue;
-    position: fixed;
-    bottom: 0;
-    height: 100px;
+    padding-bottom: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
 }

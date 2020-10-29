@@ -4,7 +4,7 @@ import React from 'react';
 
 function Phrase() {
 
-  var phrases = ["Check your sources.", "The onion is not a credible news source"]
+  var phrases = ["Check your sources."]
 
   return (
     <div className="Phrase">
