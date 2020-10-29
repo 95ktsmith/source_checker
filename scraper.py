@@ -37,7 +37,7 @@ def scrape_links(url):
                 pass
             else:
                 links_list.append(link['href'])
-        except:
+        except KeyError:
             pass
     return (links_list)
             
@@ -51,15 +51,12 @@ def filter_links(links, url):
                         'irrelevant': []
     }
     for link in links:
-        if ".gov" in link or ".edu" in link:
-            filtered_links['trusted'].append(link)
-        elif get_domain(url) in link:
+        if get_domain(url) == get_domain(link):
             filtered_links['irrelevant'].append(link)
+        elif ".gov" in link or ".edu" in link:
+            filtered_links['trusted'].append(link)
         elif ".org" in link:
             filtered_links['semi-trusted'].append(link)
         else:
             filtered_links['questionable'].append(link)
     return filtered_links
-
-
-
