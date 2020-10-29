@@ -47,16 +47,53 @@ def sourcecheck():
     }
     """
     url = request.json['url']
+    domain = scraper.get_domain(url)
+    return_data = {}
     # If the url can't be reached or is invalid format, return None
     try:
         r = requests.get(url)
         if r.status_code < 200 or r.status_code > 299:
-            return make_response(jsonify(None), 400)
-    except:
-        return make_response(jsonify(None), 400)
+            # Check for domain in database
+            db_domain = db.check_domain(domain)
+            if db_domain is not None:
+                # Get its rating if it exists
+                return_data['rating'] = db_domain['rating']
+            else:
+                # Create new domain entry if it doesn't exist
+                return_data['rating'] = 0
+                db.new_domain(domain)
 
-    domain = scraper.get_domain(url)
-    return_data = {}
+            # Get the number of ratings for this domain
+            # rating_count will be None if the domain isn't in database
+            return_data['rating_count'] = db.count_ratings(domain)
+            return_data['sources'] = {
+                'trusted': [],
+                'semi-trusted': [],
+                'questionable': [],
+                'irrelevant': []
+            }
+            return make_response(jsonify(return_data), 400)
+    except:
+        # Check for domain in database
+        db_domain = db.check_domain(domain)
+        if db_domain is not None:
+            # Get its rating if it exists
+            return_data['rating'] = db_domain['rating']
+        else:
+            # Create new domain entry if it doesn't exist
+            return_data['rating'] = 0
+            db.new_domain(domain)
+
+        # Get the number of ratings for this domain
+        # rating_count will be None if the domain isn't in database
+        return_data['rating_count'] = db.count_ratings(domain)
+        return_data['sources'] = {
+            'trusted': [],
+            'semi-trusted': [],
+            'questionable': [],
+            'irrelevant': []
+        }
+        return make_response(jsonify(return_data), 400)
 
     # If article is in database and scraped < 24 hours ago
     article = db.check_article(url)
