@@ -126,7 +126,7 @@ def update_domain(name):
     return(sumrates / numrates)
 
 
-def count_ratings(dname):
+def count_ratings(name):
     """takes in domain to determine how many reviews it has """
     domain = check_domain(name)
     if domain is None:
