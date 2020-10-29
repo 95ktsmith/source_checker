@@ -26,6 +26,8 @@ def rate_article():
         rating = float(rating)
     except ValueError:
         return make_response(jsonify(None), 500)
+    if rating < 1 or rating > 5:
+        return jsonify("Not OK"), 500
     db.new_review({'url': url, 'domain': domain, 'score': rating})
     return jsonify("Ok"), 200
 
@@ -122,7 +124,7 @@ def sourcecheck():
     db_domain = db.check_domain(domain)
     if db_domain is not None:
         # Get its rating if it exists
-        return_data['rating'] = db_domain['rating']
+        return_data['rating'] = format(db_domain['rating'], '.1f')
     else:
         # Create new domain entry if it doesn't exist
         return_data['rating'] = 0
