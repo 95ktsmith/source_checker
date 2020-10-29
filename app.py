@@ -22,8 +22,13 @@ def rate_article():
     url = request.json['url']
     domain = scraper.get_domain(url)
     rating = request.json['rating']
+    try:
+        rating = float(rating)
+    except ValueError:
+        return make_response(jsonify(None), 500)
     db.new_review({'url': url, 'domain': domain, 'score': rating})
     return jsonify("Ok"), 200
+
 
 @app.route('/sourcecheck', methods=['POST'], strict_slashes=False)
 def sourcecheck():
