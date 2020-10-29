@@ -43,8 +43,8 @@ export default class RateFtr extends React.Component {
             <div className='Rate'>
             {!this.state.loaded ?
                 <div>
-                    <h3>Is this articles sources trustworthy?</h3>
-                    <p>Help us judge this articles trust rating (1 - 5)</p>
+                    <h3>Is this article trustworthy?</h3>
+                    <p>Help us judge the trust rating for this article (1 - 5)</p>
                     <form onSubmit={this.handleSubmit}>
                         <input type="text" onChange={this.handleChange}></input>
                         <button type="submit" value='Go'>Submit</button>

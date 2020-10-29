@@ -67,7 +67,7 @@ export default class search extends React.Component {
                     <RateFtr url = {this.state.value} />
 
 
-                </div> : <div><h5>Search an article to discover what sources its using</h5></div>}
+                </div> : <div><h5>Search an article to discover what sources it is using</h5></div>}
             </div>
         );
   }  
