@@ -133,7 +133,7 @@ def count_ratings(name):
         print("domain does not exist")
         return None
     reviews = db.ratings_collection.find({'domain': name})
-    print("length of domain reviews is {}".foramt(reviews.length()))
+    print("length of domain reviews is {}".format(reviews.length()))
     num_rates = 0
     for review in reviews:
         num_rates += 1
