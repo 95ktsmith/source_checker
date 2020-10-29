@@ -1,0 +1,14 @@
+.source {
+    background-color: #FFFFFF;
+
+    border-color: gray;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
+
+    width: 100%;
+    height: auto;
+    word-break: break-all;
+    white-space: normal;
+    margin-top: 5px;
+}

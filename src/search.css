@@ -1,0 +1,46 @@
+.Search {
+    justify-content: center;
+    width: 75vw;
+}
+
+form {
+    display:flex;
+}
+
+.Search input[type=text] {
+    background-color: #ffffff;
+    outline: none;
+
+    border-top-left-radius: .5vw;
+    border-bottom-left-radius: .5vw;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    border-width: 1px;
+    width: 95vw;
+    height: 4vw;
+    font-size: 17px;
+}
+
+button {
+    border-top-right-radius: .5vw;
+    border-bottom-right-radius: .5vw;   
+    border-width: 1px;
+    border-left-width: 2px;
+    border-color: black;
+    
+    background-color: #F5F5F5;
+    
+    cursor: pointer;
+    height: 4vw;
+    width: 70px;
+}
+
+button .h6 {
+    justify-content: center;
+}
+
+button:hover {
+    background-color: #96EDBB;
+}
